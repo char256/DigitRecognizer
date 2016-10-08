@@ -3,8 +3,11 @@
 Created on Thu Oct  6 20:11:55 2016
 
 @author: xzx
+@refer to Andrew Ng's code in Machine Learning class in coursera
 """
 import numpy as np
+import math
+import matplotlib.pyplot as plt
 
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
@@ -54,3 +57,48 @@ def predict(Theta1, Theta2, X):
     ########
     #get the max in h2
     return np.argmax(h2)
+    
+def displayData(X,num = 10):
+    """
+    DISPLAYDATA display 2Ddata in a nice grid
+    by default display first 10 images of X
+    """
+    X = X[:num:,::]
+    example_width = int(round(math.sqrt(X.shape[1])))
+    m, n = X.shape
+    example_height = int(n / example_width)
+    
+    display_rows = int(math.floor(math.sqrt(m)))
+    display_cols = int(math.ceil(m / display_rows))
+    
+    display_array = np.mat((1,1))
+    curr_ex = 0
+    
+    for j in xrange(1,display_rows+1):
+        horizontal = np.mat((1,1))
+        for i in xrange(1, display_cols+1):
+            if curr_ex > m:
+                break
+            
+            max_val = np.max(np.abs(X[curr_ex, ::]))
+
+            display = X[curr_ex,::].reshape(example_height, example_width) / max_val
+            curr_ex = curr_ex + 1
+            if horizontal.shape == (1,2):
+                horizontal = display
+            else :
+                display = np.hstack((-np.ones((display.shape[0],1)), display))
+                horizontal = np.hstack((horizontal,display))
+                
+        if display_array.shape == (1,2):
+            display_array = horizontal
+        else :
+            horizontal = np.vstack((-np.ones((1,horizontal.shape[1])),horizontal))
+            display_array = np.vstack((display_array, horizontal))
+        if curr_ex > m :
+            break
+        
+    im = plt.imshow(display_array)
+    plt.show()
+    
+    
