@@ -9,6 +9,8 @@ import numpy as np
 from mtool import nnCostFunction
 from matplotlib.pyplot import plot
 from mtool import predict
+from mtool import displayData
+
 import math
 train_file = open('./train.csv', 'rb')
 train_file_object = csv.reader(train_file)
@@ -54,7 +56,7 @@ Theta2 = initial_Theta2
 J = float('inf')
 
 for t in xrange(num_iter):
-    print "iterator times: ", t
+    print "iterator times: ", t, '/', num_iter
     
     (J,Theta1_grad,Theta2_grad) = nnCostFunction(initial_Theta1, initial_Theta2 \
                                                 ,input_layer_size \
@@ -81,6 +83,36 @@ for row in data:
 #    print "ans is:",ans,"true val is:",row[0]
     
 print "Training accuracy:", correct_in_train/float(m)
+
+test_file = open('./test.csv','rb')
+test_file_object = csv.reader(test_file)
+header = test_file_object.next()
+
+test_data = []
+
+for row in test_file_object:
+    test_data.append(row)
+    
+test_data = np.array(test_data).astype(float)
+
+disp = True
+cnt = 0
+for row in test_data:
+    
+    ans = predict(Theta1, Theta2, row)
+    if disp :
+        disp = raw_input("")
+    else :
+        continue
+    if disp == '' :
+        print "test cases:", cnt, "in", test_data.shape[0]
+        displayData(np.mat(row), range(1))
+        print "the prediction is:", ans
+    elif disp == 'break':
+        break
+    elif disp == 'end':
+        disp = False
+    disp = True
 
 #test_file = open('./test.csv', 'rb')
 #test_file_object = csv.reader(test_file)

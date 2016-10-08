@@ -58,12 +58,12 @@ def predict(Theta1, Theta2, X):
     #get the max in h2
     return np.argmax(h2)
     
-def displayData(X,num = 10):
+def displayData(X,num = range(10)):
     """
     DISPLAYDATA display 2Ddata in a nice grid
     by default display first 10 images of X
     """
-    X = X[:num:,::]
+    X = X[num,::]
     example_width = int(round(math.sqrt(X.shape[1])))
     m, n = X.shape
     example_height = int(n / example_width)
